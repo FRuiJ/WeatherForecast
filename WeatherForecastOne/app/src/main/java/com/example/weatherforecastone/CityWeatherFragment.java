@@ -11,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.weatherforecastone.Bean.IndexBean;
 import com.example.weatherforecastone.Bean.WeatherBean;
 import com.google.gson.Gson;
 
 public class CityWeatherFragment extends BaseFragment implements View.OnClickListener {
-    TextView tempTv, cityTv, conditionTv, windTv, tempRangeTv, dataTv, dressIndexTv, carIndexTv, coldIndexTv, sportIndexTv, raysIndexTv;
+    TextView tempTv, cityTv, conditionTv, windTv, tempRangeTv, dateTv, dressIndexTv, carIndexTv, coldIndexTv, sportIndexTv, raysIndexTv;
     ImageView dayIv;
     LinearLayout futureLayout;
     private final String key = "&key=df2f7823c9e09064c9356c5b62f2f20f";
@@ -51,22 +52,37 @@ public class CityWeatherFragment extends BaseFragment implements View.OnClickLis
     }
     private void parseShowData(String result) {
         WeatherBean weatherBean = new Gson().fromJson(result, WeatherBean.class);
-        weatherBean.getResult().
+        WeatherBean.ResultDTO.RealtimeDTO realtime = weatherBean.getResult().getRealtime();
+        WeatherBean.ResultDTO.FutureDTO resultsBean = weatherBean.getResult().getFuture().get(0);
+
+        tempTv.setText(realtime.getTemperature());
+        cityTv.setText(weatherBean.getResult().getCity());
+        conditionTv.setText(realtime.getInfo());
+        windTv.setText(realtime.getDirect());
+        tempRangeTv.setText(resultsBean.getTemperature());
+        dateTv.setText(resultsBean.getDate());
+        IndexBean indexBean = new Gson().fromJson(result, IndexBean.class);
+        IndexBean.ResultDTO.LifeDTO life = indexBean.getResult().getLife();
+        dressIndexTv.setText(life.getChuanyi().getV());
+        carIndexTv.setText(life.getXiche().getV());
+        coldIndexTv.setText(life.getGanmao().getV());
+
+
     }
 
     private void initView(View view) {
-        tempTv = view.findViewById(R.id.item_center_tv_temp);
+        tempTv = view.findViewById(R.id.frag_tv_current_temperature);
         cityTv = view.findViewById(R.id.frag_tv_city);
         conditionTv = view.findViewById(R.id.frag_tv_condition);
         windTv = view.findViewById(R.id.frag_tv_wind);
-        tempRangeTv = view.findViewById(R.id.frag_tv_current_temperature);
-        dataTv = view.findViewById(R.id.item_center_tv_data);
+        tempRangeTv = view.findViewById(R.id.frag_tv_temp_range);
+        dateTv = view.findViewById(R.id.frag_tv_date);
         dressIndexTv = view.findViewById(R.id.frag_tv_dress);
         carIndexTv = view.findViewById(R.id.frag_tv_car);
         coldIndexTv = view.findViewById(R.id.frag_tv_cold);
         sportIndexTv = view.findViewById(R.id.frag_tv_sport);
         raysIndexTv = view.findViewById(R.id.frag_tv_rays);
-        dataTv = view.findViewById(R.id.frag_iv_day);
+        dayIv = view.findViewById(R.id.frag_iv_day);
         futureLayout = view.findViewById(R.id.frag_center_layout);
         dressIndexTv.setOnClickListener(this);
         carIndexTv.setOnClickListener(this);

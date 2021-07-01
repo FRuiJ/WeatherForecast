@@ -20,8 +20,8 @@
 
             <TextView
                 android:id="@+id/frag_tv_current_temperature"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textSize="60sp"
                 android:textStyle="bold"
                 tools:text="12℃" />
@@ -70,6 +70,7 @@
                 android:background="#000000" />
 
             <TextView
+                android:id="@+id/frag_tv_temp_range"
                 style="@style/todaytext"
                 android:layout_alignBottom="@id/frag_tv_wind"
                 android:layout_toRightOf="@id/frag_tv_line1"
