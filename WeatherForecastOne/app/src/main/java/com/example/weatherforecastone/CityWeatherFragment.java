@@ -15,6 +15,8 @@ import com.example.weatherforecastone.Bean.IndexBean;
 import com.example.weatherforecastone.Bean.WeatherBean;
 import com.google.gson.Gson;
 
+import java.util.List;
+
 public class CityWeatherFragment extends BaseFragment implements View.OnClickListener {
     TextView tempTv, cityTv, conditionTv, windTv, tempRangeTv, dateTv, dressIndexTv, carIndexTv, coldIndexTv, sportIndexTv, raysIndexTv;
     ImageView dayIv;
@@ -50,24 +52,31 @@ public class CityWeatherFragment extends BaseFragment implements View.OnClickLis
     public void onError(Throwable ex, boolean isOnCallback) {
         super.onError(ex, isOnCallback);
     }
+
     private void parseShowData(String result) {
         WeatherBean weatherBean = new Gson().fromJson(result, WeatherBean.class);
-        WeatherBean.ResultDTO.RealtimeDTO realtime = weatherBean.getResult().getRealtime();
-        WeatherBean.ResultDTO.FutureDTO resultsBean = weatherBean.getResult().getFuture().get(0);
+        WeatherBean.ResultDTO.RealtimeDTO resultsBean = weatherBean.getResult().getRealtime();
+        // 今日
+        WeatherBean.ResultDTO.FutureDTO todayDataBean = weatherBean.getResult().getFuture().get(0);
 
-        tempTv.setText(realtime.getTemperature());
+        tempTv.setText(resultsBean.getTemperature());
         cityTv.setText(weatherBean.getResult().getCity());
-        conditionTv.setText(realtime.getInfo());
-        windTv.setText(realtime.getDirect());
-        tempRangeTv.setText(resultsBean.getTemperature());
-        dateTv.setText(resultsBean.getDate());
+        conditionTv.setText(resultsBean.getInfo());
+        windTv.setText(resultsBean.getDirect());
+        tempRangeTv.setText(todayDataBean.getTemperature());
+        dateTv.setText(todayDataBean.getDate());
         IndexBean indexBean = new Gson().fromJson(result, IndexBean.class);
         IndexBean.ResultDTO.LifeDTO life = indexBean.getResult().getLife();
         dressIndexTv.setText(life.getChuanyi().getV());
-        carIndexTv.setText(life.getXiche().getV());
-        coldIndexTv.setText(life.getGanmao().getV());
+//        carIndexTv.setText(life.getXiche().getV());
+//        coldIndexTv.setText(life.getGanmao().getV());
+//        sportIndexTv.setText(life.getYundong().getV());
+//        raysIndexTv.setText(life.getZiwaixian().getV());
+        List<WeatherBean.ResultDTO.FutureDTO> futureDTOList = weatherBean.getResult().getFuture();
+        futureDTOList.remove(0);
+        for (int i = 0; i < futureDTOList.size(); i++) {
 
-
+        }
     }
 
     private void initView(View view) {
